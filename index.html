@@ -59,7 +59,7 @@
                   <strong>First Name:</strong>
                 </div>
                 <div class="col">
-                  <input v-model="order.firstName" class="form-control" />
+                  <input v-model.trim="order.firstName" class="form-control" />
                 </div>
               </div>
               <div class="col-md-6">
@@ -67,7 +67,7 @@
                   <strong>Last Name:</strong>
                 </div>
                 <div class="col">
-                  <input v-model="order.lastName" class="form-control" />
+                  <input v-model.trim="order.lastName" class="form-control" />
                 </div>
               </div>
             </div>
@@ -75,7 +75,7 @@
               <div class="col-md-12">
               <div class="col"><strong> Address:</strong></div>
               <div class="col">
-                <input v-model="order.address" class="form-control" />
+                <input v-model.trim="order.address" class="form-control" />
               </div>
               </div>
             </div>
@@ -83,7 +83,7 @@
               <div class="col-md-12">
               <div class="col"><strong>City:</strong></div>
               <div class="col">
-                <input v-model="order.city" class="form-control" />
+                <input v-model.trim="order.city" class="form-control" />
               </div>
               </div>
             </div>
@@ -99,7 +99,7 @@
               </div>
               <div class="col-md-6">
                 <strong>Zip / Postal Code:</strong>
-                <input v-model="order.zip" class="form-control" />
+                <input v-model.number="order.zip" type="number" class="form-control" />
               </div>
             </div>
             <div class="row">
