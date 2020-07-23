@@ -1,136 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/vue"></script>
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
-    />
-    <title>Shop</title>
-  </head>
-  <body>
-    <div id="app">
-      <header>
-        <nav class="navbar navbar-light justify-content-between">
-          <div>
-            <h1>{{ sitename }}</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/vue"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+  <title>Shop</title>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <nav class="navbar navbar-light justify-content-between">
+        <div>
+          <h1>{{ sitename }}</h1>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" @click="showCheckout">
+            <span>{{ cartItemCount }}</span>
+            Checkout
+          </button>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div v-if="showProduct">
+        <div class="row product">
+          <div class="col">
+            <figure>
+              <img class="img-thumbnail" :src="product.image" />
+            </figure>
           </div>
-          <div>
-            <button type="button" class="btn btn-primary" @click="showCheckout">
-              <span>{{ cartItemCount }}</span>
-              Checkout
+          <div class="col">
+            <h1 v-text="product.title"></h1>
+            <p v-html="product.description"></p>
+            <p class="price">
+              {{ product.price | formatPrice }}
+            </p>
+            <button class="btn btn-primary" @click="addToCart" v-if="canAddToCart">
+              Add to Cart
+            </button>
+            <button class="btn btn-warning" v-else disabled>
+              Empty stock
             </button>
           </div>
-        </nav>
-      </header>
-      <main>
-        <div v-if="showProduct">
-          <div class="row product">
-            <div class="col">
-              <figure>
-                <img class="img-thumbnail" :src="product.image" />
-              </figure>
-            </div>
-            <div class="col">
-              <h1 v-text="product.title"></h1>
-              <p v-html="product.description"></p>
-              <p class="price">
-                {{ product.price | formatPrice }}
-              </p>
-              <button
-                class="btn btn-primary"
-                @click="addToCart"
-                v-if="canAddToCart"
-              >
-                Add to Cart
-              </button>
-              <button class="btn btn-warning" v-else disabled>
-                Empty stock
-              </button>
-            </div>
-          </div>
         </div>
-        <div v-else>
-          <div class="col-md-5">
-            <div class="alert-primary">Checkout</div>
-            <div class="form-group">
-              <div class="col-md-12">
-                <strong>First Name:</strong>
+      </div>
+      <div v-else>
+        <div class="container">
+          <form>
+            <div class="alert alert-primary">Checkout</div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col">
+                  <strong>First Name:</strong>
+                </div>
+                <div class="col">
+                  <input v-model="order.firstName" class="form-control" />
+                </div>
               </div>
-              <div class="col-md-12">
-                <input v-model="order.firstName" class="form-control" />
+              <div class="col-md-6">
+                <div class="col">
+                  <strong>Last Name:</strong>
+                </div>
+                <div class="col">
+                  <input v-model="order.lastName" class="form-control" />
+                </div>
               </div>
             </div>
-            <div class="form-group">
+            <div class="row">
               <div class="col-md-12">
-                <strong>Last Name:</strong>
-              </div>
-              <div class="col-md-12">
-                <input v-model="order.lastName" class="form-control" />
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-12"><strong> Address:</strong></div>
-              <div class="col-md-12">
+              <div class="col"><strong> Address:</strong></div>
+              <div class="col">
                 <input v-model="order.address" class="form-control" />
               </div>
+              </div>
             </div>
-            <div class="form-group">
-              <div class="col-md-12"><strong>City:</strong></div>
+            <div class="row">
               <div class="col-md-12">
+              <div class="col"><strong>City:</strong></div>
+              <div class="col">
                 <input v-model="order.city" class="form-control" />
               </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-2">
-                <strong>State:</strong>
-                <select v-model="order.state">
-                  <option disabled value="">State</option>
-                  <option>Faerûn</option>
-                  <option>Zakhara</option>
-                  <option>Kara-Tur</option>
-                  <option>Laerakond</option>
-                </select>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-md-6 col-md-offset-4">
+            <div class="row">
+              <div class="col-md-6">
+                <strong>State:</strong>
+                <select v-model="order.state" class="form-control">
+                  <option disabled value="">State</option>
+                  <option v-for="(state,key) in states" v-bind:value="state">
+                    {{ key }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
                 <strong>Zip / Postal Code:</strong>
                 <input v-model="order.zip" class="form-control" />
               </div>
             </div>
-            <div class="form-group">
+            <div class="row">
               <div class="col-md-6">
-                <input
-                  type="radio"
-                  id="home"
-                  value="Home"
-                  v-model="order.method"
-                />
-                <label for="home">Home</label>
-                <input
-                  type="radio"
-                  id="business"
-                  value="Business"
-                  v-model="order.method"
-                />
-                <label for="business">Business</label>
+                <div class="col">
+                  <input type="radio" id="home" v-bind:value="order.home" v-model="order.method" />
+                  <label for="home">Home</label>
+                  <input type="radio" id="business" v-bind:value="order.business" v-model="order.method" />
+                  <label for="business">Business</label>
+                </div>
               </div>
-            </div>
-            <div class="form-group">
               <div class="col-md-6">
-                <input
-                  type="checkbox"
-                  id="gift"
-                  value="true"
-                  v-model="order.gift"
-                />
-                <label for="gift">Ship as gift?</label>
+                <div class="col">
+                  <input type="checkbox" id="gift" value="true" v-bind:true-value="order.sendGift" v-bind:false-value="order.dontSendGift" v-model="order.gift" />
+                  <label for="gift">Ship as gift?</label>
+                </div>
               </div>
             </div>
             <div class="">
@@ -145,126 +130,138 @@
                   Method : {{order.method}}
               </pre>
             </div>
+        <div class="form-group">
+          <div class="col">
+            <button type="submit" class="btn btn-primary" @click="submitForm">
+              Place your order
+            </button>
           </div>
-          <div class="form-group">
-            <div class="col-md-6">
-              <button type="submit" class="btn btn-primary" @click="submitForm">
-                Place your order
-              </button>
-            </div>
-          </div>
+        </form>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
+  </div>
 
-    <script type="text/javascript">
-      var APP_LOG_LIFECYCLE_EVENTS = true;
-      var webstore = new Vue({
-        el: "#app",
-        data: {
-          sitename: "Fantasy Dungeon Supplies",
-          product: {
-            id: 1001,
-            title: "Pile of bones, medium",
-            description:
-              "A pile of medium bones, <b>perfect</b> for decorating your dungeon. The origin of bones come from medium-sized races like humans, elves, dwarves,...",
-            price: 1000,
-            image: "assets/images/bonepile.png",
-            availableInventory: 5,
-          },
-          cart: [],
-          showProduct: false,
-          order: {
-            firstName: "",
-            lastName: "",
-            address: "",
-            city: "",
-            state: "",
-            zip: "",
-            gift: false,
-            method: "Home",
-          },
+  <script type="text/javascript">
+    var APP_LOG_LIFECYCLE_EVENTS = true;
+    var webstore = new Vue({
+      el: "#app",
+      data: {
+        sitename: "Fantasy Dungeon Supplies",
+        product: {
+          id: 1001,
+          title: "Pile of bones, medium",
+          description:
+            "A pile of medium bones, <b>perfect</b> for decorating your dungeon. The origin of bones come from medium-sized races like humans, elves, dwarves,...",
+          price: 1000,
+          image: "assets/images/bonepile.png",
+          availableInventory: 5,
         },
-        filters: {
-          formatPrice: function (price) {
-            console.log("start");
-            if (!parseInt(price)) {
-              return "";
+        cart: [],
+        showProduct: false,
+        order: {
+          firstName: "",
+          lastName: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
+          gift: 'Do not send as a gift',
+          method: "Home Address",
+          sendGift:'Send as a gift',
+          dontSendGift: 'Do not send as a gift',
+          business: 'Business Address',
+          home: 'Home Address'
+        },
+          states: {
+            FA: 'Faerun',
+            ZA:'Zakhara',
+            KA:'Kara-tur',
+            LA:'Laerakond'
+          },
+      },
+      filters: {
+        formatPrice: function (price) {
+          console.log("start");
+          if (!parseInt(price)) {
+            return "";
+          }
+          if (price > 99999) {
+            let priceString = (price / 100).toFixed(2);
+            let priceArray = priceString.split("").reverse();
+            let index = 3;
+            while (priceArray.length > index + 3) {
+              priceArray.splice(index + 3, 0, ",");
+              index += 4;
             }
-            if (price > 99999) {
-              let priceString = (price / 100).toFixed(2);
-              let priceArray = priceString.split("").reverse();
-              let index = 3;
-              while (priceArray.length > index + 3) {
-                priceArray.splice(index + 3, 0, ",");
-                index += 4;
-              }
-              return "€" + priceArray.reverse().join("");
-            } else {
-              return "€" + (price / 100).toFixed(2);
-            }
-          },
-        },
-        methods: {
-          addToCart: function () {
-            this.cart.push(this.product.id);
-          },
-          showCheckout() {
-            this.showProduct = this.showProduct ? false : true;
-          },
-          submitForm() {
-            alert("Submitted");
-          },
-        },
-        computed: {
-          cartItemCount: function () {
-            return this.cart.length || "";
-          },
-          canAddToCart: function () {
-            return this.product.availableInventory > this.cartItemCount;
-          },
-        },
-        beforeCreate: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeCreate");
+            return "€" + priceArray.reverse().join("");
+          } else {
+            return "€" + (price / 100).toFixed(2);
           }
         },
-        created: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("created");
-          }
+      },
+      methods: {
+        addToCart: function () {
+          this.cart.push(this.product.id);
         },
-        beforeMount: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeMount");
-          }
+        showCheckout() {
+          this.showProduct = this.showProduct ? false : true;
         },
-        mounted: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("mounted");
-          }
+        submitForm() {
+          console.log(this.order)
+          alert("Submitted");
         },
-        beforeUpdate: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeUpdate");
-          }
+      },
+      computed: {
+        cartItemCount: function () {
+          return this.cart.length || "";
         },
-        updated: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("updated");
-          }
+        canAddToCart: function () {
+          return this.product.availableInventory > this.cartItemCount;
         },
-        beforeDestroy: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("beforeDestroy");
-          }
-        },
-        destroyed: () => {
-          if (APP_LOG_LIFECYCLE_EVENTS) {
-            console.log("destroyed");
-          }
-        },
-      });
-    </script>
-  </body>
+      },
+      beforeCreate: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeCreate");
+        }
+      },
+      created: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("created");
+        }
+      },
+      beforeMount: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeMount");
+        }
+      },
+      mounted: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("mounted");
+        }
+      },
+      beforeUpdate: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeUpdate");
+        }
+      },
+      updated: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("updated");
+        }
+      },
+      beforeDestroy: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("beforeDestroy");
+        }
+      },
+      destroyed: () => {
+        if (APP_LOG_LIFECYCLE_EVENTS) {
+          console.log("destroyed");
+        }
+      },
+    });
+  </script>
+</body>
+
 </html>
