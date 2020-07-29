@@ -51,8 +51,9 @@
             <button class="btn btn-warning" v-else disabled="true">
              Add to Cart 
             </button>
-            <span class="alert alert-danger" v-if="product.availableInventory - cartItemCount(product.id) === 0">Stock is currently empty!</span>
-            <span class="alert alert-warning" v-else="product.availableInventory - cartItemCount(product.id) < 5">Only {{product.availableInventory - cartItemCount}} left!</span>
+            <span class="alert alert-danger" v-if="product.availableInventory - cartCount(product.id) === 0">Stock is currently empty!</span>
+            <span class="alert alert-warning" v-else-if="product.availableInventory - cartCount(product.id) < 5">Only {{product.availableInventory - cartCount(product.id)}} left!</span>
+            <span v-else>Plenty left!</span>
           </div>
         </div>
       </div>
@@ -237,7 +238,7 @@
           console.log("beforeCreate");
         }
       },
-      created: () => {
+      created: function(){
         axios.get('./products.json')
         .then(response => {
           this.products = response.data.products;
