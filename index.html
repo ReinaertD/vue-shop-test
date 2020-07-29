@@ -37,15 +37,20 @@
           <div class="col">
             <h1 v-text="product.title"></h1>
             <p v-html="product.description"></p>
+            <div class="rating">
+              <span v-bind:class="{'rating-active': checkRating(n)}" v-for="n in 5">☆</span>
+            </div>
             <p class="price">
               {{ product.price | formatPrice }}
             </p>
             <button class="btn btn-primary" @click="addToCart" v-if="canAddToCart">
               Add to Cart
             </button>
-            <button class="btn btn-warning" v-else disabled>
-              Empty stock
+            <button class="btn btn-warning" v-else disabled="true">
+             Add to Cart 
             </button>
+            <span class="alert alert-danger" v-if="product.availableInventory - cartItemCount === 0">Stock is currently empty!</span>
+            <span class="alert alert-warning" v-else="product.availableInventory - cartItemCount < 5">Only {{product.availableInventory - cartItemCount}} left!</span>
           </div>
         </div>
       </div>
@@ -155,7 +160,8 @@
             "A pile of medium bones, <b>perfect</b> for decorating your dungeon. The origin of bones come from medium-sized races like humans, elves, dwarves,...",
           price: 1000,
           image: "assets/images/bonepile.png",
-          availableInventory: 5,
+          availableInventory: 11,
+          rating:3,
         },
         cart: [],
         showProduct: false,
@@ -210,6 +216,9 @@
         submitForm() {
           console.log(this.order)
           alert("Submitted");
+        },
+        checkRating(n){
+          return this.product.rating - n >= 0;
         },
       },
       computed: {
