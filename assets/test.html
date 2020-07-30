@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <my-component></my-component>
+      <my-component></my-component>
+      <my-component></my-component>
+      <another-component
+        :num="myNumber"
+        :str="hellow"
+        :even="myNumber"
+        :obj="anObject"
+      ></another-component>
+      <p>{{counter}}</p>
+      <button @click="incrementCounter">Increment from parent</button>
+      <yet-another-component
+        v-on:increment-me="incrementCounter"
+      ></yet-another-component>
+    </div>
+    <script>
+      const YetAnotherComponent = {
+        template: `<div><button v-on:click="childIncrementCounter">Increment from child</button></div>`,
+        methods: {
+          childIncrementCounter() {
+            this.$emit("increment-me");
+          },
+        },
+      };
+      const MyComponent = {
+        template:
+          '<div><button v-on:click="counter +=1">{{counter}}</button></div>',
+        data() {
+          return {
+            counter: 0,
+          };
+        },
+      };
+      const AnotherComponent = {
+        template:
+          "<div><p>Number: {{num}}</p><p>String: {{str}}</p><p>Even: {{even}}</p><p>Object: {{obj.message}}</p></div>",
+        props: {
+          num: {
+            type: Number,
+            required: true,
+          },
+          str: {
+            type: String,
+            default: "Hello Texas",
+          },
+          even: {
+            validator: (value) => {
+              return value % 2 === 0;
+            },
+          },
+          obj: {
+            type: Object,
+            default: () => {
+              return { message: "WHATEVER, I DO WHAT I WANT" };
+            },
+          },
+        },
+      };
+      new Vue({
+        el: "#app",
+        components: {
+          "my-component": MyComponent,
+          "another-component": AnotherComponent,
+          "yet-another-component": YetAnotherComponent,
+        },
+        data() {
+          return {
+            hellow: "What up party poeple",
+            myNumber: 1,
+            anObject: { message: "Praise the lawd" },
+            counter: 0,
+          };
+        },
+        methods: {
+          incrementCounter() {
+            this.counter += 1;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
