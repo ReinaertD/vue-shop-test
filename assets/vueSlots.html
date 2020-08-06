@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <book-component :books="books">
+        <h2 slot="header2">{{header2}}</h2>
+        <template slot="book" slot-scope="props">
+          <h2>
+            <i>{{props.text.title}}</i>
+            <small>by: {{props.text.author}}</small>
+          </h2>
+        </template>
+      </book-component>
+      <form-component>
+        <h2>{{header}}</h2>
+        <label for="title" slot="titleSlot">{{titleLabel}}</label>
+        <label for="author" slot="authorSlot">{{authorLabel}}</label>
+      </form-component>
+    </div>
+    <script>
+      const BookComponent = {
+        template: `
+            <div>
+                <slot name="header2"></slot>
+                <slot name="book"
+                    v-for="book in books"
+                    :text="book">
+                    </slot>
+            </div>
+            `,
+        props: ["books"],
+      };
+
+      const FormComponent = {
+        template: `
+              <div>  
+              <form>
+              <slot></slot>
+                <slot name="titleSlot"></slot>
+                <input id="title" type="text"/><br/> 
+                <slot name="authorSlot"></slot>
+                <input id="author" type="text"/><br/> 
+                <button>Submit</button>
+              </form>
+              </div>
+              `,
+      };
+      new Vue({
+        el: "#app",
+        components: {
+          "form-component": FormComponent,
+          "book-component": BookComponent,
+        },
+        data() {
+          return {
+            titleLabel: "Title:",
+            authorLabel: "Author:",
+            header: "Book Author Form",
+            books: [
+              { author: "J. Oak", title: "Best of trees" },
+              { author: "Betsy Bettington", title: "A Gamblers' Bet" },
+              {
+                author: "Derek Smart",
+                title: "How everyone is being tricked!",
+              },
+            ],
+            header2: "Available Books",
+          };
+        },
+      });
+    </script>
+  </body>
+</html>
