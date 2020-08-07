@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{header}}</h1>
+      <slot-component>
+        <template v-slot:test>
+          <h2>{{stringo}}</h2>
+        </template>
+        <template #another>
+          <p>This is another test</p>
+        </template>
+      </slot-component>
+    </div>
+
+    <script>
+      const SlotComponent = {
+        template: ` 
+            <div>
+            <slot name="test">placeholder#1</slot>
+            <slot name="another">placeholder#2</slot>
+            </div>
+            `,
+      };
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            header: "v-slot instead of slot",
+            stringo: "This is a stringo",
+          };
+        },
+        components: {
+          "slot-component": SlotComponent,
+        },
+      });
+    </script>
+  </body>
+</html>
