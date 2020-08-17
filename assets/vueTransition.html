@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+      .fade-enter-active,.fade-leave-active{
+        transition:opacity 3.0s ease-out;
+      }
+      .fade-enter,.fade-leave-to{
+        opacity:0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div @click="show = !show">
+        <h1>{{header}}</h1>
+      </div>
+      <transition name="fade"
+        ><div v-if="show"><p>This is a description of the book</p></transition
+      ></div>
+    </div>
+
+    <script>
+      const TransitionComponent = {
+        template: `
+            <div>
+            </div>
+            `,
+      };
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            header: "Vue Animation Transition, the book",
+            show: false,
+          };
+        },
+        components: {
+          "transition-component": TransitionComponent,
+        },
+        methods: {},
+      });
+    </script>
+  </body>
+</html>
