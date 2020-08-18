@@ -16,6 +16,8 @@
         <!-- Start container-->
         <div class="container">
             <h1 class="text-center">{{header}}</h1>
+            <p v-style-me>{{text}}</p>
+            <p v-style-me>This is another line that needs to be style</p>
         </div>
         <!-- End container-->
     </div>
@@ -30,9 +32,19 @@
         data() {
           return {
             header: "Vue Directives",
+            text: "This is a directive to style me!"
           };
         },
         methods: {},
+        directives:{
+            styleMe(el,binding,vnode,oldVnode){
+                bind:{
+                    el.style.color="blue",
+                    el.style.fontSize="42px",
+                    el.className="text-center"
+                }
+            }
+        }
       });
     </script>
   </body>
