@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+    </style>
+  </head>
+  <body>
+      <!-- Start app-->
+    <div id="app">
+        <!-- Start container-->
+        <div class="container">
+            <h1 class="text-center">{{header}}</h1>
+            <p v-style-me:text-center.large="'red'">{{text}}</p>
+            <p v-style-me:text-center.small="'green'">This is another line that needs to be style</p>
+            <p v-style-me:text-center>Yelp</p>
+        </div>
+        <!-- End container-->
+    </div>
+      <!-- End app-->
+    </body>
+
+    <script>
+        Vue.directive('style-me',{
+            bind(el,binding){
+                el.style.color= binding.value || "blue";
+                if(binding.modifiers.large){
+                    el.style.fontSize = "42px";
+                } else if(binding.modifiers.small){
+                    el.style.fontSize="17px"
+                }
+                el.className=binding.arg;
+            }
+        });
+
+      new Vue({
+        el: "#app",
+        components:{
+        },
+        data() {
+          return {
+            header: "Vue Directives",
+            text: "This is a directive to style me!"
+          };
+        },
+        methods: {},
+      });
+    </script>
+  </body>
+</html>
