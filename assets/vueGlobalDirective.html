@@ -17,7 +17,7 @@
         <div class="container">
             <h1 class="text-center">{{header}}</h1>
             <p v-style-me:text-center.large="'red'">{{text}}</p>
-            <p v-style-me:text-center.small="'green'">This is another line that needs to be style</p>
+            <p v-style-me:small="'green'">This is another line that needs to be style</p>
             <p v-style-me:text-center>Yelp</p>
         </div>
         <!-- End container-->
@@ -34,6 +34,7 @@
                 } else if(binding.modifiers.small){
                     el.style.fontSize="17px"
                 }
+                console.log(``,binding.arg)
                 el.className=binding.arg;
             }
         });
